@@ -7,6 +7,8 @@ These animations come with a configurable fade-in, fade-out timeline.
 
 It does not capture touches, so you can pepper it safely though your XML layout files.
 
+![Example](https://raw.githubusercontent.com/thomsonreuters/RippleDecoratorView/master/RDV.gif)
+
 Usage
 =====================
 
