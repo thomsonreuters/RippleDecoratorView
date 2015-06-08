@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="RippleDecoratorView">
+        <attr name="rdv_rippleColor" format="color" />
+        <attr name="rdv_rippleStyle" format="enum" >
+            <enum name="stroke" value="0"/>
+            <enum name="fill" value="1"/>
+        </attr>
+        <attr name="rdv_rippleMaxAlpha" format="float" />
+        <attr name="rdv_rippleCentered" format="boolean" />
+        <attr name="rdv_ripplePadding" format="dimension" />
+        <attr name="rdv_rippleRadius" format="dimension" />
+
+        <attr name="rdv_rippleAnimationTrigger" format="enum" >
+            <enum name="onUp" value="0"/>
+            <enum name="onDown" value="1"/>
+            <enum name="onTap" value="2"/>
+        </attr>
+        <attr name="rdv_rippleAnimationDuration" format="float" />
+        <attr name="rdv_rippleAnimationFrames" format="integer" />
+        <attr name="rdv_rippleAnimationPeakFrame" format="integer" />
+
+        <attr name="rdv_zoomAnimation" format="boolean" />
+        <attr name="rdv_zoomAnimationTrigger" format="enum" >
+            <enum name="onUp" value="0"/>
+            <enum name="onDown" value="1"/>
+            <enum name="onTap" value="2"/>
+        </attr>
+        <attr name="rdv_zoomAnimationScale" format="float" />
+        <attr name="rdv_zoomAnimationDuration" format="float" />
+
+        <attr name="rdv_highlightAnimation" format="boolean" />
+        <attr name="rdv_highlightColor" format="color" />
+        <attr name="rdv_highlightMaxAlpha" format="float" />
+        <attr name="rdv_highlightAnimationPeakFrame" format="integer" />
+    </declare-styleable>
+</resources>

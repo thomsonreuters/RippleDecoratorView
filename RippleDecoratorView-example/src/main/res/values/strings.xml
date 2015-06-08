@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RippleDecoratorView</string>
+    <string name="title_activity_main">RippleDecoratorView Example</string>
+    <string name="text_tap">Tap me!</string>
+</resources>
