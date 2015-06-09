@@ -219,7 +219,17 @@ There is a module in the repository called RippleDecoratorView-Example that show
 Distribution and installation
 =====================
 
-Add it as a dependency on your build.gradle
+[Download the latest .aar from Maven Central](https://oss.sonatype.org/content/groups/public/com/thomsonreuters/rippledecoratorview/)
+
+**or**
+
+add it as a dependency on your build.gradle
+
+    repositories {
+        ...
+        mavenCentral()
+        ...
+    }
 
     dependencies {
        ...
