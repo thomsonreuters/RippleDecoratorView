@@ -14,6 +14,7 @@ limitations under the License. */
 
 package com.thomsonreuters.rippledecoratorviewexample;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -34,8 +36,16 @@ public class MainActivity extends ActionBarActivity {
         ListView list = (ListView)findViewById(R.id.test_lsv);
         list.setAdapter(new SampleAdapter());
         RippleDecoratorView rdvNewInterpolator = (RippleDecoratorView)findViewById(R.id.ripple_interp_rdv);
-        rdvNewInterpolator.setInterpolator(new AccelerateInterpolator());
+        rdvNewInterpolator.setInterpolator(new DecelerateInterpolator());
+        rdvNewInterpolator.setRippleStyle(RippleDecoratorView.Styles.FILL);
         rdvNewInterpolator.setZoomInterpolator(new AccelerateInterpolator());
+        RippleDecoratorView rdvHighlight = (RippleDecoratorView)findViewById(R.id.ripple_highlight_rdv);
+        rdvHighlight.setHighlighColor(Color.GREEN);
+        rdvHighlight.setRippleAnimationDuration(1000);
+        rdvHighlight.setRippleAnimationFrames(30);
+        /* Ripple Animation Peak <= Ripple Animation Frames */
+        rdvHighlight.setRippleAnimationPeakFrame(0);
+        rdvHighlight.setHighlightAnimationPeakFrame(20);
     }
 
     @Override

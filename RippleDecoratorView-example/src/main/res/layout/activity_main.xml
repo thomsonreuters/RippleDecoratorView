@@ -71,6 +71,7 @@
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
     <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
+        android:id="@+id/ripple_highlight_rdv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:rdv_highlightAnimation="true"
