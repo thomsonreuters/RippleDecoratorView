@@ -1,7 +1,7 @@
 Ripple Decorator View
 =====================
 
-RippleDecoratorView is a widget library with a view used to wrap any of you layouts.
+RippleDecoratorView is a widget library with a view used to wrap any of your layouts.
 It allows you, for any touch, to add animations effects such as: ripple stroke, ripple fill, highlight, and zoom.
 These animations come with a configurable fade-in, fade-out timeline.
 
@@ -223,7 +223,7 @@ Distribution and installation
 
 **or**
 
-add it as a dependency on your build.gradle
+add it as a dependency on your ```build.gradle```
 
     repositories {
         ...
