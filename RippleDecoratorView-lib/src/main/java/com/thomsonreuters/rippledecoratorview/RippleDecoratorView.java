@@ -29,8 +29,20 @@ import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 public class RippleDecoratorView extends RelativeLayout {
+    public static final float NANOS_TO_MILLIS = 1000000.0F;
+
     public enum Triggers {
-        onUp, onDown, onTap
+        onUp, onDown, onTap;
+        private static Triggers fromOrdinal(int ord) {
+            switch (ord) {
+                case 0:
+                    return onUp;
+                case 1:
+                    return onDown;
+                default:
+                    return onTap;
+            }
+        }
     }
 
     public enum Styles {
@@ -69,7 +81,7 @@ public class RippleDecoratorView extends RelativeLayout {
 
     public static final float RIPPLE_RADIUS = -1.0F;
 
-    public static final int RIPPLE_ANIMATION_TRIGGER = Triggers.onTap.ordinal();
+    public static final Triggers RIPPLE_ANIMATION_TRIGGER = Triggers.onTap;
 
     public static final float RIPPLE_ANIMATION_DURATION = 400.0F;
 
@@ -77,7 +89,7 @@ public class RippleDecoratorView extends RelativeLayout {
 
     public static final boolean ZOOM_ANIMATION = false;
 
-    public static final int ZOOM_ANIMATION_TRIGGER = Triggers.onTap.ordinal();
+    public static final Triggers ZOOM_ANIMATION_TRIGGER = Triggers.onTap;
 
     public static final float ZOOM_SCALE = 1.03F;
 
@@ -97,7 +109,7 @@ public class RippleDecoratorView extends RelativeLayout {
 
     private float mRippleRadius = RIPPLE_RADIUS;
 
-    private int mRippleAnimationTrigger = RIPPLE_ANIMATION_TRIGGER;
+    private Triggers mRippleAnimationTrigger = RIPPLE_ANIMATION_TRIGGER;
 
     private float mRippleAnimationDuration = RIPPLE_ANIMATION_DURATION;
 
@@ -107,7 +119,7 @@ public class RippleDecoratorView extends RelativeLayout {
 
     private boolean mZoomAnimation = ZOOM_ANIMATION;
 
-    private int mZoomAnimationTrigger = ZOOM_ANIMATION_TRIGGER;
+    private Triggers mZoomAnimationTrigger = ZOOM_ANIMATION_TRIGGER;
 
     private float mZoomAnimationScale = ZOOM_SCALE;
 
@@ -153,7 +165,7 @@ public class RippleDecoratorView extends RelativeLayout {
 
     private GestureDetector mTapGestureDetector;
 
-    private Runnable runnable = new Runnable() {
+    private Runnable invalidateRunnable = new Runnable() {
         @Override
         public void run() {
             invalidate();
@@ -178,64 +190,15 @@ public class RippleDecoratorView extends RelativeLayout {
         if (isInEditMode()) {
             return;
         }
-        final TypedArray typedArray = context.obtainStyledAttributes(attrs,
-                R.styleable.RippleDecoratorView);
-        mRippleColor = typedArray.getColor(R.styleable.RippleDecoratorView_rdv_rippleColor,
-                getResources().getColor(RIPPLE_COLOR));
-        mRippleStyle = Styles.fromOrdinal(typedArray.getInt(
-                R.styleable.RippleDecoratorView_rdv_rippleStyle, Styles.stroke.ordinal()));
-        mRippleMaxAlpha = 255.0F * Math.min(1.0F, typedArray.getFloat(
-                R.styleable.RippleDecoratorView_rdv_rippleMaxAlpha, mRippleMaxAlpha));
-        mRippleCentered = typedArray.getBoolean(R.styleable.RippleDecoratorView_rdv_rippleCentered,
-                mRippleCentered);
-        mRipplePadding = typedArray.getDimensionPixelSize(
-                R.styleable.RippleDecoratorView_rdv_ripplePadding, mRipplePadding);
-        mRippleRadius = typedArray.getDimensionPixelSize(
-                R.styleable.RippleDecoratorView_rdv_rippleRadius, (int)mRippleRadius);
-        mRippleAnimationTrigger = typedArray
-                .getInt(R.styleable.RippleDecoratorView_rdv_rippleAnimationTrigger,
-                        mRippleAnimationTrigger);
-        mRippleAnimationDuration = typedArray.getFloat(
-                R.styleable.RippleDecoratorView_rdv_rippleAnimationDuration,
-                mRippleAnimationDuration);
-        mRippleAnimationFrames = typedArray.getInt(
-                R.styleable.RippleDecoratorView_rdv_rippleAnimationFrames, mRippleAnimationFrames);
-        mRippleAnimationPeakFrame = typedArray.getInt(
-                R.styleable.RippleDecoratorView_rdv_rippleAnimationPeakFrame,
-                mRippleAnimationFrames);
-        mZoomAnimation = typedArray.getBoolean(R.styleable.RippleDecoratorView_rdv_zoomAnimation,
-                mZoomAnimation);
-        mZoomAnimationTrigger = typedArray.getInt(
-                R.styleable.RippleDecoratorView_rdv_rippleAnimationTrigger, mZoomAnimationTrigger);
-        mZoomAnimationScale = typedArray.getFloat(
-                R.styleable.RippleDecoratorView_rdv_zoomAnimationScale, mZoomAnimationScale);
-        mZoomAnimationDuration = typedArray
-                .getFloat(R.styleable.RippleDecoratorView_rdv_zoomAnimationDuration,
-                        mRippleAnimationDuration);
-        mHighlightAnimation = typedArray.getBoolean(
-                R.styleable.RippleDecoratorView_rdv_highlightAnimation, mHighlightAnimation);
-        mHighlighColor = typedArray.getColor(R.styleable.RippleDecoratorView_rdv_highlightColor,
-                mRippleColor);
-        mHighlightMaxAlpha = 255.0F * Math.min(1.0F, typedArray.getFloat(
-                R.styleable.RippleDecoratorView_rdv_highlightMaxAlpha, mHighlightMaxAlpha));
-        mHighlightAnimationPeakFrame = typedArray.getInt(
-                R.styleable.RippleDecoratorView_rdv_highlightAnimationPeakFrame,
-                mRippleAnimationFrames);
-        mFrameDuration = mRippleAnimationDuration / mRippleAnimationFrames;
-        mCanvasHandler = new Handler();
-        mRipplePaint = new Paint();
-        mRipplePaint.setAntiAlias(true);
-        mRipplePaint.setStyle((mRippleStyle.getStyle()));
-        mRipplePaint.setColor(mRippleColor);
-        mRipplePaint
-                .setStrokeWidth(2 * this.getContext().getResources().getDisplayMetrics().density);
-        mRipplePaint.setAlpha(0);
-        mHighlightPaint = new Paint();
-        mHighlightPaint.setAntiAlias(false);
-        mHighlightPaint.setStyle(Paint.Style.FILL);
-        mHighlightPaint.setAlpha(0);
-        mHighlightPaint.setColor(mHighlighColor);
         this.setWillNotDraw(false);
+        this.setDrawingCacheEnabled(true);
+        initFromTypedArray(context, attrs);
+        initPaints();
+        initGestures(context);
+        mCanvasHandler = new Handler();
+    }
+
+    private void initGestures(Context context) {
         mDownGestureDetector = new GestureDetector(context,
                 new GestureDetector.SimpleOnGestureListener() {
                     @Override
@@ -255,59 +218,139 @@ public class RippleDecoratorView extends RelativeLayout {
                         return true;
                     }
                 });
-        mAnimationStartNanoTime = 0L;
-        this.setDrawingCacheEnabled(true);
+    }
+
+    private void initPaints() {
+        mRipplePaint = new Paint();
+        mRipplePaint.setAntiAlias(true);
+        mRipplePaint
+                .setStrokeWidth(2 * this.getContext().getResources().getDisplayMetrics().density);
+        mHighlightPaint = new Paint();
+        mHighlightPaint.setAntiAlias(false);
+        mHighlightPaint.setStyle(Paint.Style.FILL);
+    }
+
+    private void initFromTypedArray(Context context, AttributeSet attrs) {
+        final TypedArray typedArray = context.obtainStyledAttributes(attrs,
+                R.styleable.RippleDecoratorView);
+        mRippleColor = typedArray.getColor(R.styleable.RippleDecoratorView_rdv_rippleColor,
+                getResources().getColor(RIPPLE_COLOR));
+        mRippleStyle = Styles.fromOrdinal(typedArray.getInt(
+                R.styleable.RippleDecoratorView_rdv_rippleStyle, Styles.stroke.ordinal()));
+        mRippleMaxAlpha = 255.0F * Math.min(1.0F, typedArray.getFloat(
+                R.styleable.RippleDecoratorView_rdv_rippleMaxAlpha, mRippleMaxAlpha));
+        mRippleCentered = typedArray.getBoolean(R.styleable.RippleDecoratorView_rdv_rippleCentered,
+                mRippleCentered);
+        mRipplePadding = typedArray.getDimensionPixelSize(
+                R.styleable.RippleDecoratorView_rdv_ripplePadding, mRipplePadding);
+        mRippleRadius = typedArray.getDimensionPixelSize(
+                R.styleable.RippleDecoratorView_rdv_rippleRadius, (int)mRippleRadius);
+        mRippleAnimationTrigger = Triggers.fromOrdinal(typedArray.getInt(
+                R.styleable.RippleDecoratorView_rdv_rippleAnimationTrigger,
+                mRippleAnimationTrigger.ordinal()));
+        mRippleAnimationDuration = typedArray.getFloat(
+                R.styleable.RippleDecoratorView_rdv_rippleAnimationDuration,
+                mRippleAnimationDuration);
+        mRippleAnimationFrames = typedArray.getInt(
+                R.styleable.RippleDecoratorView_rdv_rippleAnimationFrames, mRippleAnimationFrames);
+        mRippleAnimationPeakFrame = typedArray.getInt(
+                R.styleable.RippleDecoratorView_rdv_rippleAnimationPeakFrame,
+                mRippleAnimationFrames);
+        mZoomAnimation = typedArray.getBoolean(R.styleable.RippleDecoratorView_rdv_zoomAnimation,
+                mZoomAnimation);
+        mZoomAnimationTrigger = Triggers.fromOrdinal(typedArray.getInt(
+                R.styleable.RippleDecoratorView_rdv_rippleAnimationTrigger,
+                mZoomAnimationTrigger.ordinal()));
+        mZoomAnimationScale = typedArray.getFloat(
+                R.styleable.RippleDecoratorView_rdv_zoomAnimationScale, mZoomAnimationScale);
+        mZoomAnimationDuration = typedArray
+                .getFloat(R.styleable.RippleDecoratorView_rdv_zoomAnimationDuration,
+                        mRippleAnimationDuration);
+        mHighlightAnimation = typedArray.getBoolean(
+                R.styleable.RippleDecoratorView_rdv_highlightAnimation, mHighlightAnimation);
+        mHighlighColor = typedArray.getColor(R.styleable.RippleDecoratorView_rdv_highlightColor,
+                mRippleColor);
+        mHighlightMaxAlpha = 255.0F * Math.min(1.0F, typedArray.getFloat(
+                R.styleable.RippleDecoratorView_rdv_highlightMaxAlpha, mHighlightMaxAlpha));
+        mHighlightAnimationPeakFrame = typedArray.getInt(
+                R.styleable.RippleDecoratorView_rdv_highlightAnimationPeakFrame,
+                mRippleAnimationFrames);
+        typedArray.recycle();
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (mIsAnimationRunning) {
-            float deltaMilliseconds = (System.nanoTime() - mAnimationStartNanoTime) / 1000000.0F;
+            float deltaMilliseconds = (System.nanoTime() - mAnimationStartNanoTime)
+                    / NANOS_TO_MILLIS;
             if (mRippleAnimationDuration <= deltaMilliseconds) {
                 mIsAnimationRunning = false;
                 mCurrentFrame = 0;
                 canvas.restore();
                 mAnimationStartNanoTime = 0;
                 invalidate();
-                return;
             } else {
-                mCanvasHandler.postDelayed(runnable, (long)mFrameDuration);
+                mCanvasHandler.postDelayed(invalidateRunnable, (long)mFrameDuration);
+                validateAnimation(mRippleAnimationFrames, mRippleAnimationPeakFrame,
+                        mHighlightAnimation, mHighlightAnimationPeakFrame);
+                if (mCurrentFrame == 0) {
+                    canvas.save();
+                }
+                mCurrentFrame = (int)(deltaMilliseconds / mFrameDuration);
+                /* Java integer division returns an integer #justjavathings */
+                if (mHighlightAnimation) {
+                    Paint highLightPaint = preparePaintHighlight(mHighlightPaint, mCurrentFrame,
+                            mRippleAnimationFrames, mHighlightAnimationPeakFrame,
+                            mHighlightMaxAlpha, mInterpolator);
+                    canvas.drawRect(canvas.getClipBounds(), highLightPaint);
+                }
+                Paint highLightPaint = preparePaintRipple(mRipplePaint, mCurrentFrame,
+                        mRippleAnimationFrames, mRippleAnimationPeakFrame, mRippleMaxAlpha,
+                        mFrameDuration, mRippleAnimationDuration);
+                canvas.drawCircle(
+                        mPositionX,
+                        mPositionY,
+                        (mRippleRadius * (((float)mCurrentFrame * mFrameDuration) / mRippleAnimationDuration)),
+                        highLightPaint);
             }
-            if (mRippleAnimationFrames <= 0) {
-                throw new IllegalArgumentException("Animation  frames need to be higher than 0");
-            }
-            if ((mHighlightAnimation && mHighlightAnimationPeakFrame > mRippleAnimationFrames)
-                    || mRippleAnimationPeakFrame > mRippleAnimationFrames) {
-                throw new IllegalArgumentException("Peak frames cannot be higher than total frames");
-            }
-            if (mCurrentFrame == 0) {
-                canvas.save();
-            }
-            mCurrentFrame = (int)(deltaMilliseconds / mFrameDuration);
-            /* Java integer division returns an integer #justjavathings */
-            float rippleInterpolatorPosition = (mCurrentFrame - 1 < mRippleAnimationPeakFrame) ? (float)mCurrentFrame
-                    / (float)mRippleAnimationPeakFrame
-                    : (1 - ((float)(mCurrentFrame - mRippleAnimationPeakFrame) / (float)(mRippleAnimationFrames - mRippleAnimationPeakFrame)));
-            int rippleAlpha = (int)(mRippleMaxAlpha * mInterpolator
-                    .getInterpolation(rippleInterpolatorPosition));
-            mRipplePaint
-                    .setAlpha((int)(rippleAlpha - ((rippleAlpha) * (((float)mCurrentFrame * mFrameDuration) / mRippleAnimationDuration))));
-            if (mHighlightAnimation) {
-                float rectInterpolatorPosition = (mCurrentFrame - 1 < mHighlightAnimationPeakFrame) ? (float)mCurrentFrame
-                        / (float)mHighlightAnimationPeakFrame
-                        : 1 - (((float)(mCurrentFrame - mHighlightAnimationPeakFrame) / (float)(mRippleAnimationFrames - mHighlightAnimationPeakFrame)));
-                int rectAlpha = (int)(mHighlightMaxAlpha * mInterpolator
-                        .getInterpolation(rectInterpolatorPosition));
-                mHighlightPaint.setAlpha(rectAlpha);
-                canvas.drawRect(canvas.getClipBounds(), mHighlightPaint);
-            }
-            canvas.drawCircle(
-                    mPositionX,
-                    mPositionY,
-                    (mRippleRadius * (((float)mCurrentFrame * mFrameDuration) / mRippleAnimationDuration)),
-                    mRipplePaint);
         }
+    }
+
+    private void validateAnimation(int animationFrames, int rippleAnimationPeakFrame,
+            boolean highlightAnimation, int highlightAnimationPeakFrame) {
+        if (animationFrames <= 0) {
+            throw new IllegalArgumentException("Animation  frames need to be higher than 0");
+        }
+        if ((highlightAnimation && highlightAnimationPeakFrame > animationFrames)
+                || rippleAnimationPeakFrame > animationFrames) {
+            throw new IllegalArgumentException("Peak frames cannot be higher than total frames");
+        }
+    }
+
+    private Paint preparePaintHighlight(Paint highlightPaint, int currentFrame,
+            int animationFrames, int highlightAnimationPeakFrame, float highlightMaxAlpha,
+            Interpolator interpolator) {
+        float rectInterpolatorPosition = (currentFrame - 1 < highlightAnimationPeakFrame) ? (float)currentFrame
+                / (float)highlightAnimationPeakFrame
+                : 1 - (((float)(currentFrame - highlightAnimationPeakFrame) / (float)(animationFrames - highlightAnimationPeakFrame)));
+        int rectAlpha = (int)(highlightMaxAlpha * interpolator
+                .getInterpolation(rectInterpolatorPosition));
+        highlightPaint.setAlpha(rectAlpha);
+        return highlightPaint;
+    }
+
+    private Paint preparePaintRipple(Paint ripplePaint, int currentFrame, int animationFrames,
+            int rippleAnimationPeakFrame, float rippleMaxAlpha, float frameDuration,
+            float rippleAnimationDuration) {
+        float rippleInterpolatorPosition = (currentFrame - 1 < rippleAnimationPeakFrame) ? (float)currentFrame
+                / (float)rippleAnimationPeakFrame
+                : (1 - ((float)(currentFrame - rippleAnimationPeakFrame) / (float)(animationFrames - rippleAnimationPeakFrame)));
+        int rippleAlpha = (int)(rippleMaxAlpha * mInterpolator
+                .getInterpolation(rippleInterpolatorPosition));
+        ripplePaint
+                .setAlpha((int)(rippleAlpha - ((rippleAlpha) * (((float)currentFrame * frameDuration) / rippleAnimationDuration))));
+        return ripplePaint;
     }
 
     @Override
@@ -326,33 +369,33 @@ public class RippleDecoratorView extends RelativeLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (mZoomAnimation && mZoomAnimationTrigger == Triggers.onUp.ordinal()) {
-                this.startAnimation(mScaleAnimation);
-            }
-            if (!mIsAnimationRunning && mRippleAnimationTrigger == Triggers.onUp.ordinal()) {
-                startDrawAnimation(event);
-            }
+            checkAnimations(event, Triggers.onUp);
         }
         if (mDownGestureDetector.onTouchEvent(event)) {
-            if (mZoomAnimation && mZoomAnimationTrigger == Triggers.onDown.ordinal()) {
-                this.startAnimation(mScaleAnimation);
-            }
-            if (!mIsAnimationRunning && mRippleAnimationTrigger == Triggers.onDown.ordinal()) {
-                startDrawAnimation(event);
-            }
+            checkAnimations(event, Triggers.onDown);
         }
         if (mTapGestureDetector.onTouchEvent(event)) {
-            if (mZoomAnimation && mZoomAnimationTrigger == Triggers.onTap.ordinal()) {
-                this.startAnimation(mScaleAnimation);
-            }
-            if (!mIsAnimationRunning && mRippleAnimationTrigger == Triggers.onTap.ordinal()) {
-                startDrawAnimation(event);
-            }
+            checkAnimations(event, Triggers.onTap);
         }
         return true;
     }
 
+    private void checkAnimations(MotionEvent event, Triggers triggers) {
+        if (mZoomAnimation && mZoomAnimationTrigger == triggers) {
+            this.startAnimation(mScaleAnimation);
+        }
+        if (!mIsAnimationRunning && mRippleAnimationTrigger == triggers) {
+            startDrawAnimation(event);
+        }
+    }
+
     private void startDrawAnimation(MotionEvent event) {
+        mFrameDuration = mRippleAnimationDuration / mRippleAnimationFrames;
+        mRipplePaint.setStyle((mRippleStyle.getStyle()));
+        mRipplePaint.setColor(mRippleColor);
+        mRipplePaint.setAlpha(0);
+        mHighlightPaint.setColor(mHighlighColor);
+        mHighlightPaint.setAlpha(0);
         if (mRippleRadius == -1) {
             mRippleRadius = Math.max(mWidth, mHeight) / 2 - mRipplePadding;
         }
@@ -381,6 +424,9 @@ public class RippleDecoratorView extends RelativeLayout {
         return false;
     }
 
+    // /////////////
+    // PUBLIC API //
+    // /////////////
     /**
      * Cancels all running animations for this view. NOTE: Does not cancel zoom animation.
      */
@@ -504,7 +550,7 @@ public class RippleDecoratorView extends RelativeLayout {
      * @return current trigger
      */
     public Triggers getRippleAnimationTrigger() {
-        return Triggers.values()[mRippleAnimationTrigger];
+        return mRippleAnimationTrigger;
     }
 
     /**
@@ -513,7 +559,7 @@ public class RippleDecoratorView extends RelativeLayout {
      * @param trigger new trigger
      */
     public void setRippleAnimationTrigger(Triggers trigger) {
-        this.mRippleAnimationTrigger = trigger.ordinal();
+        this.mRippleAnimationTrigger = trigger;
     }
 
     /**
@@ -593,7 +639,7 @@ public class RippleDecoratorView extends RelativeLayout {
      * 
      * @return trigger
      */
-    public int getZoomAnimationTrigger() {
+    public Triggers getZoomAnimationTrigger() {
         return this.mZoomAnimationTrigger;
     }
 
@@ -603,7 +649,7 @@ public class RippleDecoratorView extends RelativeLayout {
      * @param trigger trigger
      */
     public void setZoomAnimationTrigger(Triggers trigger) {
-        this.mZoomAnimationTrigger = trigger.ordinal();
+        this.mZoomAnimationTrigger = trigger;
     }
 
     /**
