@@ -46,7 +46,7 @@ public class RippleDecoratorView extends RelativeLayout {
     }
 
     public enum Styles {
-        stroke(Paint.Style.STROKE), fill(Paint.Style.FILL);
+        STROKE(Paint.Style.STROKE), FILL(Paint.Style.FILL);
         private Paint.Style mStyle;
 
         Styles(Paint.Style mStyle) {
@@ -56,11 +56,11 @@ public class RippleDecoratorView extends RelativeLayout {
         private static Styles fromOrdinal(int ord) {
             switch (ord) {
                 case 0:
-                    return stroke;
+                    return STROKE;
                 case 1:
-                    return fill;
+                    return FILL;
                 default:
-                    return stroke;
+                    return STROKE;
             }
         }
 
@@ -71,7 +71,7 @@ public class RippleDecoratorView extends RelativeLayout {
 
     public static final int RIPPLE_COLOR = android.R.color.white;
 
-    public static final Styles RIPPLE_STYLE = Styles.stroke;
+    public static final Styles RIPPLE_STYLE = Styles.STROKE;
 
     public static final float RIPPLE_MAX_ALPHA = 1.0F;
 
@@ -236,7 +236,7 @@ public class RippleDecoratorView extends RelativeLayout {
         mRippleColor = typedArray.getColor(R.styleable.RippleDecoratorView_rdv_rippleColor,
                 getResources().getColor(RIPPLE_COLOR));
         mRippleStyle = Styles.fromOrdinal(typedArray.getInt(
-                R.styleable.RippleDecoratorView_rdv_rippleStyle, Styles.stroke.ordinal()));
+                R.styleable.RippleDecoratorView_rdv_rippleStyle, Styles.STROKE.ordinal()));
         mRippleMaxAlpha = 255.0F * Math.min(1.0F, typedArray.getFloat(
                 R.styleable.RippleDecoratorView_rdv_rippleMaxAlpha, mRippleMaxAlpha));
         mRippleCentered = typedArray.getBoolean(R.styleable.RippleDecoratorView_rdv_rippleCentered,
@@ -320,7 +320,7 @@ public class RippleDecoratorView extends RelativeLayout {
     private void validateAnimation(int animationFrames, int rippleAnimationPeakFrame,
             boolean highlightAnimation, int highlightAnimationPeakFrame) {
         if (animationFrames <= 0) {
-            throw new IllegalArgumentException("Animation  frames need to be higher than 0");
+            throw new IllegalArgumentException("Animation frames need to be higher than 0");
         }
         if ((highlightAnimation && highlightAnimationPeakFrame > animationFrames)
                 || rippleAnimationPeakFrame > animationFrames) {
