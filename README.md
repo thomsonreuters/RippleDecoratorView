@@ -238,11 +238,12 @@ add it as a dependency on your ```build.gradle```
     }
     
 **or**
+
     repositories {
         ...
         maven {
 	        url "https://jitpack.io"
-	    }
+	      }
         ...
     }
 
