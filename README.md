@@ -9,6 +9,7 @@ It does not capture touches, so you can pepper it safely though your XML layout 
 
 ![Example](https://raw.githubusercontent.com/thomsonreuters/RippleDecoratorView/master/RDV.gif)
 
+
 Usage
 =====================
 
@@ -39,6 +40,23 @@ Then wrap any layout with a com.thomsonreuters.rippledecoratorview.RippleDecorat
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
 
+Lifecycle
+=====================
+
+These methods help you handle the animation lifecycle programmatically. You can use ``none`` trigger
+described in ``Configuration`` to make the animation play only when activated with the methods in this section.
+
+    doAnimation
+
+Starts the animation on a given X, Y position. Does nothing if the animation is already running.
+
+    cancelAnimation
+
+Stops the animation. Does nothing if the animation is already stopped. Does not cancel zoom animation.
+
+**It is recommended to call cancelAnimation inside an adapter view when a position is recreated
+to avoid view recycling causing the animation to be played on unwanted positions.**
+
 
 Configuration
 =====================
@@ -52,7 +70,7 @@ Ripple
 
     rdv_rippleAnimationTrigger
 
-When the ripple animation will be played: onTap, onTouchDown or onTouchUp.
+When the ripple animation will be played: none, onTap, onTouchDown or onTouchUp.
 Default: onTap.
 
 
@@ -137,7 +155,7 @@ Default: 1,03.
 
     rdv_zoomAnimationTrigger
 
-When the zoom animation will be played: onTap, onTouchDown or onTouchUp.
+When the zoom animation will be played: none, onTap, onTouchDown or onTouchUp.
 Default: onTap.
 
 

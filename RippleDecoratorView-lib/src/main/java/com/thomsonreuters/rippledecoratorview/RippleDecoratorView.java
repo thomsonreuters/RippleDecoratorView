@@ -32,15 +32,17 @@ public class RippleDecoratorView extends RelativeLayout {
     public static final float NANOS_TO_MILLIS = 1000000.0F;
 
     public enum Triggers {
-        onUp, onDown, onTap;
+        onUp, onDown, onTap, none;
         private static Triggers fromOrdinal(int ord) {
             switch (ord) {
                 case 0:
                     return onUp;
                 case 1:
                     return onDown;
-                default:
+                case 2:
                     return onTap;
+                default:
+                    return none;
             }
         }
     }
@@ -385,11 +387,11 @@ public class RippleDecoratorView extends RelativeLayout {
             this.startAnimation(mScaleAnimation);
         }
         if (!mIsAnimationRunning && mRippleAnimationTrigger == triggers) {
-            startDrawAnimation(event);
+            startDrawAnimation(event.getX(), event.getY());
         }
     }
 
-    private void startDrawAnimation(MotionEvent event) {
+    private void startDrawAnimation(float x, float y) {
         mFrameDuration = mRippleAnimationDuration / mRippleAnimationFrames;
         mRipplePaint.setStyle((mRippleStyle.getStyle()));
         mRipplePaint.setColor(mRippleColor);
@@ -403,8 +405,8 @@ public class RippleDecoratorView extends RelativeLayout {
             this.mPositionX = getMeasuredWidth() / 2;
             this.mPositionY = getMeasuredHeight() / 2;
         } else {
-            this.mPositionX = event.getX();
-            this.mPositionY = event.getY();
+            this.mPositionX = x;
+            this.mPositionY = y;
         }
         mIsAnimationRunning = true;
         mAnimationStartNanoTime = System.nanoTime();
@@ -427,6 +429,16 @@ public class RippleDecoratorView extends RelativeLayout {
     // /////////////
     // PUBLIC API //
     // /////////////
+    /**
+     * Starts animations for this view programmatically.
+     */
+    public void doAnimation(float x, float y) {
+        startDrawAnimation(x, y);
+        if (mZoomAnimation) {
+            this.startAnimation(mScaleAnimation);
+        }
+    }
+
     /**
      * Cancels all running animations for this view. NOTE: Does not cancel zoom animation.
      */

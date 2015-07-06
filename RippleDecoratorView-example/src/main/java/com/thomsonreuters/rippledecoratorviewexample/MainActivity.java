@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.thomsonreuters.rippledecoratorview.RippleDecoratorView;
@@ -46,6 +47,14 @@ public class MainActivity extends ActionBarActivity {
         /* Ripple Animation Peak <= Ripple Animation Frames */
         rdvHighlight.setRippleAnimationPeakFrame(0);
         rdvHighlight.setHighlightAnimationPeakFrame(20);
+        final RippleDecoratorView rdvActivate = (RippleDecoratorView)findViewById(R.id.ripple_activate_rdv);
+        Button btnActivate = (Button)findViewById(R.id.ripple_activate_btn);
+        btnActivate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rdvActivate.doAnimation(rdvActivate.getMeasuredWidth() / 2, rdvActivate.getMeasuredHeight() / 2);
+            }
+        });
     }
 
     @Override

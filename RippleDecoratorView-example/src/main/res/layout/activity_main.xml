@@ -11,21 +11,21 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="4dp"
-        app:rdv_rippleColor="@android:color/holo_blue_dark"
+        app:rdv_rippleAnimationDuration="600"
         app:rdv_rippleAnimationFrames="60"
         app:rdv_rippleAnimationPeakFrame="15"
+        app:rdv_rippleColor="@android:color/holo_blue_dark"
         app:rdv_rippleMaxAlpha="0.8"
-        app:rdv_rippleAnimationDuration="600"
         app:rdv_rippleRadius="50dp">
 
         <TextView
-            android:text="Regular"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:background="@android:color/darker_gray"
-            android:textColor="@android:color/white"
-            android:padding="10dp" />
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Regular"
+            android:textColor="@android:color/white" />
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
     <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
@@ -33,40 +33,40 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="4dp"
-        app:rdv_rippleColor="@android:color/holo_blue_dark"
+        app:rdv_rippleAnimationDuration="600"
         app:rdv_rippleAnimationFrames="60"
         app:rdv_rippleAnimationPeakFrame="45"
+        app:rdv_rippleColor="@android:color/holo_blue_dark"
         app:rdv_rippleMaxAlpha="0.8"
-        app:rdv_rippleAnimationDuration="600"
         app:rdv_rippleRadius="50dp"
         app:rdv_rippleStyle="fill">
 
         <TextView
-            android:text="Fill"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:background="@android:color/darker_gray"
-            android:textColor="@android:color/white"
-            android:padding="10dp" />
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Fill"
+            android:textColor="@android:color/white" />
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
     <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
         android:id="@+id/ripple_interp_rdv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:rdv_rippleColor="@android:color/holo_blue_dark"
         app:rdv_zoomAnimation="true"
         app:rdv_zoomAnimationDuration="400"
-        app:rdv_rippleColor="@android:color/holo_blue_dark"
         app:rdv_zoomAnimationScale="2">
 
         <!-- New interpolator set in MainActivity.java -->
 
         <Button
-            android:text="Zoom | Swap Interpolator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp" />
+            android:padding="4dp"
+            android:text="Zoom | Swap Interpolator" />
 
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
@@ -75,53 +75,87 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:rdv_highlightAnimation="true"
+        app:rdv_highlightAnimationPeakFrame="30"
         app:rdv_highlightColor="@android:color/holo_blue_light"
         app:rdv_highlightMaxAlpha="0.8"
-        app:rdv_highlightAnimationPeakFrame="30"
         app:rdv_rippleAnimationFrames="60"
         app:rdv_rippleRadius="0dp">
 
         <Button
-            android:text="Highlight | No ripple"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp" />
+            android:padding="4dp"
+            android:text="Highlight | No ripple" />
 
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
     <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:rdv_rippleAnimationTrigger="onDown"
         app:rdv_rippleCentered="true"
         app:rdv_rippleColor="@android:color/holo_blue_dark"
-        app:rdv_rippleAnimationTrigger="onDown"
+        app:rdv_rippleAnimationDuration="600"
         app:rdv_rippleRadius="20dp">
 
         <Button
-            android:text="Centered | Trigger OnDown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp" />
+            android:padding="4dp"
+            android:text="Centered | Trigger OnDown" />
 
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
     <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:rdv_rippleAnimationDuration="5000"
         app:rdv_rippleAnimationFrames="60"
         app:rdv_rippleAnimationPeakFrame="60"
-        app:rdv_rippleMaxAlpha="1"
         app:rdv_rippleColor="@android:color/holo_red_dark"
-        app:rdv_rippleRadius="200dp"
-        app:rdv_rippleAnimationDuration="5000">
+        app:rdv_rippleMaxAlpha="1"
+        app:rdv_rippleRadius="200dp">
 
         <Button
-            android:text="Slow Animation | Huge Ripple"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp" />
+            android:padding="4dp"
+            android:text="Slow Animation | Huge Ripple" />
 
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <Button
+            android:id="@+id/ripple_activate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:padding="10dp"
+            android:text="Activate" />
+
+        <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
+            android:id="@+id/ripple_activate_rdv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:rdv_rippleColor="@android:color/holo_orange_light"
+            app:rdv_rippleAnimationTrigger="none"
+            app:rdv_zoomAnimation="true"
+            app:rdv_zoomAnimationTrigger="onTap">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="Programmatically" />
+
+        </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/test_lsv"
