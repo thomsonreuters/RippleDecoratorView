@@ -431,6 +431,9 @@ public class RippleDecoratorView extends RelativeLayout {
     // /////////////
     /**
      * Starts animations for this view programmatically.
+     * 
+     * @param x Center of the animation in the x axis
+     * @param y Center of the animation in the y axis
      */
     public void doAnimation(float x, float y) {
         startDrawAnimation(x, y);
