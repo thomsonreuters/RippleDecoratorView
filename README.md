@@ -250,11 +250,26 @@ add it as a dependency on your ```build.gradle```
     }
 
     dependencies {
-       ...
-       compile 'com.thomsonreuters:rippledecoratorview:+'
-       ...
+        ...
+        compile 'com.thomsonreuters:rippledecoratorview:+'
+        ...
+    }
+    
+**or**
+
+    repositories {
+        ...
+        maven {
+	        url "https://jitpack.io"
+	      }
+        ...
     }
 
+    dependencies {
+        ...
+        compile 'com.github.thomsonreuters:RippleDecoratorView:v1.0.1'
+        ...
+    }
 
 Contact
 =====================
