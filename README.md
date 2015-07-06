@@ -267,7 +267,7 @@ add it as a dependency on your ```build.gradle```
 
     dependencies {
         ...
-        compile 'com.github.thomsonreuters:RippleDecoratorView:v1.0.1'
+        compile 'com.github.thomsonreuters:RippleDecoratorView:v1.0.2'
         ...
     }
 
