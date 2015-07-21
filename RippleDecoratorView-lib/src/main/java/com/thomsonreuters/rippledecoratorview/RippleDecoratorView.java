@@ -17,6 +17,7 @@ package com.thomsonreuters.rippledecoratorview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -71,7 +72,7 @@ public class RippleDecoratorView extends RelativeLayout {
         }
     }
 
-    public static final int RIPPLE_COLOR = android.R.color.white;
+    public static final int RIPPLE_COLOR = Color.WHITE;
 
     public static final Styles RIPPLE_STYLE = Styles.STROKE;
 
@@ -176,6 +177,7 @@ public class RippleDecoratorView extends RelativeLayout {
 
     public RippleDecoratorView(Context context) {
         super(context);
+        init(context, null);
     }
 
     public RippleDecoratorView(Context context, AttributeSet attrs) {
@@ -194,7 +196,13 @@ public class RippleDecoratorView extends RelativeLayout {
         }
         this.setWillNotDraw(false);
         this.setDrawingCacheEnabled(true);
-        initFromTypedArray(context, attrs);
+        if (null == attrs) {
+            /* Obtain empty array */
+            initFromTypedArray(context.obtainStyledAttributes(new int[] {}));
+        } else {
+            initFromTypedArray(context.obtainStyledAttributes(attrs,
+                    R.styleable.RippleDecoratorView));
+        }
         initPaints();
         initGestures(context);
         mCanvasHandler = new Handler();
@@ -232,11 +240,9 @@ public class RippleDecoratorView extends RelativeLayout {
         mHighlightPaint.setStyle(Paint.Style.FILL);
     }
 
-    private void initFromTypedArray(Context context, AttributeSet attrs) {
-        final TypedArray typedArray = context.obtainStyledAttributes(attrs,
-                R.styleable.RippleDecoratorView);
+    private void initFromTypedArray(TypedArray typedArray) {
         mRippleColor = typedArray.getColor(R.styleable.RippleDecoratorView_rdv_rippleColor,
-                getResources().getColor(RIPPLE_COLOR));
+                RIPPLE_COLOR);
         mRippleStyle = Styles.fromOrdinal(typedArray.getInt(
                 R.styleable.RippleDecoratorView_rdv_rippleStyle, Styles.STROKE.ordinal()));
         mRippleMaxAlpha = 255.0F * Math.min(1.0F, typedArray.getFloat(
