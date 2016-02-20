@@ -14,12 +14,12 @@ Usage
 =====================
 
 Import the custom namespace (app, rdv, your choice) into your layout, below the android schema:
-
+```xml
     xmlns:rdv="http://schemas.android.com/apk/res-auto"
-
+```
 
 Then wrap any layout with a com.thomsonreuters.rippledecoratorview.RippleDecoratorView element:
-
+```xml
     <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -38,7 +38,7 @@ Then wrap any layout with a com.thomsonreuters.rippledecoratorview.RippleDecorat
             android:padding="4dp" />
 
     </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
-
+```
 
 Lifecycle
 =====================
@@ -243,6 +243,7 @@ Distribution and installation
 
 add it as a dependency on your ```build.gradle```
 
+```gradle
     repositories {
         ...
         mavenCentral()
@@ -254,9 +255,9 @@ add it as a dependency on your ```build.gradle```
         compile 'com.thomsonreuters:rippledecoratorview:+'
         ...
     }
-    
+```
 **or**
-
+```gradle
     repositories {
         ...
         maven {
@@ -270,7 +271,7 @@ add it as a dependency on your ```build.gradle```
         compile 'com.github.thomsonreuters:RippleDecoratorView:v1.0.2'
         ...
     }
-
+```
 Contact
 =====================
 
